@@ -5,9 +5,17 @@ const { Category, Product } = require('../../models');
 
 router.get('/', (req, res) => {
   Category.findAll({
-    include: [Product],
-  }).then(results => {
-    res.json(results);
+    attributes: ["id", "category_name"],
+    include: {
+      model: Product,
+      attributes: ["id", "product_name", "price", "stock", "category_id"],
+    },
+  }).then((CategoryData) => {
+    res.json(CategoryData);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json(err);
   });
 });
 
@@ -18,19 +26,35 @@ router.get('/:id', (req, res) => {
     where: {
       id: req.params.id,
     },
-    include: [Product]
-  }).then(results => {
-    res.json(results);
+    attributes: ["id","category_name"],
+    include: {
+      model: Product,
+      attributes: ["id", "product_name", "price", "stock", "category_id"],
+    },
+  }).then((CategoryData) => {
+    if(!CategoryData) {
+      res.status(404).json({ message: "No categories found" });
+      return;
+    }
+    res.json(CategoryData);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json(err);
   });
-});
+ });
 
 router.post('/', (req, res) => {
 Category.create({
   id: req.body.id,
   category_name: req.body.category_name,
-}).then(results => {
-  res.json(results);
+}).then((CategoryData) => {
+  res.json(CategoryData);
 })
+.catch((err) => {
+  console.log(err);
+  res.status(500).json(err);
+  });
 });
 
 router.put('/:id', (req, res) => {
@@ -44,9 +68,17 @@ router.put('/:id', (req, res) => {
       id: req.params.id,
     },
   }
-  ).then(results => {
-    res.json(results);
+  ).then((CategoryData) => {
+    if(!CategoryData) {
+      res.status(404).json({message: 'No category found!'});
+      return;
+    }
+    res.json(CategoryData);
   })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json(err);
+  });
 });
 
 router.delete('/:id', (req, res) => {
@@ -55,9 +87,18 @@ router.delete('/:id', (req, res) => {
     where: {
       id: req.params.id,
     }
-  }).then(results => {
-    res.json(results);
+  }).then((CategoryData) => {
+    if(!CategoryData) {
+      res.status(404).json({message: "No category found"});
+      return;
+    }
+    res.json(CategoryData);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json(err);
   });
-});
+  });
+
 
 module.exports = router;
