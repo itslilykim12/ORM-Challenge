@@ -9,11 +9,11 @@ ProductTag.init(
     // define columns
     product_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
     tag_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
     }
   },
   {
