@@ -93,7 +93,7 @@ router.delete('/:id', (req, res) => {
     },
   }).then((TagData) => {
     if(!TagData) {
-      res.status(404).json({message: "No Tags Found"});
+      res.status(404).json({message: "No Tag Found"});
       return;
     }
     res.status(200).json(TagData);
